@@ -1,52 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-</head>
-<body>
+  </head>
+  <body>
     <h1>Conversation Board</h1>
-    <div id='convo'>
-        <div id="msg"></div>
-
-    </div>
-    <!-- <form action="/" method="POST"> -->
-        <input type="text" placeholder="enter your message here">
-        <button id="send">send</button>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                var socket = io.connect();
-                var user = prompt("Your name: ")
-                var username = '';
-                socket.emit('new_user', {user:user});
-                $('#send').click(function(){
-                socket.emit('input_send', {msg: $("input").val()});
-                })
-                socket.on('post_user', function(data){
-                    // socket.emit('input_send', {msg: $("#send").val()})
-                    console.log(data.user);
-                    username = data.user;
-                    var posted_user = document.createElement('p');
-                    posted_user.innerHTML += "User: " + data.user;
-                    document.getElementById('msg').appendChild(posted_user);
-                })
-                socket.on("posted_input", function(data){
-                    var posted_input = document.createElement('p');
-                    posted_input.innerHTML += username+": " + data.msg ;
-                    document.getElementById('msg').appendChild(posted_input);
-                    var line = document.createElement('hr');
-                    document.getElementById('msg').appendChild(line);
-                })
-    
-                // socket.emit('input_send', {msg: $("#send").val()});
-            })
-    
-            
-        </script>
-</body>
+    <div id="convo"><div id="msg"></div></div>
+    <input type="text" placeholder="enter your message here" />
+    <button id="send">send</button>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var socket = io.connect();
+        var user = prompt("Your name: ");
+        var username = "";
+        socket.emit("new_user", { user: user });
+        $("#send").click(function() {
+          socket.emit("input_send", { msg: $("input").val() });
+        });
+        socket.on("post_user", function(data) {
+          console.log(data.user);
+          username = data.user;
+          var posted_user = document.createElement("p");
+          posted_user.innerHTML += "User: " + data.user;
+          document.getElementById("msg").appendChild(posted_user);
+        });
+        //some bugs with the username being incorrect/sending an input is not optimal
+        socket.on("posted_input", function(data) {
+          var posted_input = document.createElement("p");
+          posted_input.innerHTML += username + ": " + data.msg;
+          document.getElementById("msg").appendChild(posted_input);
+          var line = document.createElement("hr");
+          document.getElementById("msg").appendChild(line);
+        });
+      });
+    </script>
+  </body>
 </html>
